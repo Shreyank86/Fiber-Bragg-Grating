@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fiber Bragg Grating (FBG) Sensing — ML Project: Complete Technical Deep-Dive</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 15mm 20mm 15mm;
+  }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.6;
+    font-size: 11pt;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: #0f172a;
+    font-size: 22pt;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 8px;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  h2 {
+    color: #1e3a8a;
+    font-size: 15pt;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 4px;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #1e40af;
+    font-size: 12pt;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+  h4 {
+    color: #334155;
+    font-size: 11pt;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  p, li {
+    color: #334155;
+  }
+  ul, ol {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    padding-left: 24px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 10pt;
+  }
+  pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 9.5pt;
+    line-height: 1.45;
+    page-break-inside: avoid;
+  }
+  pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 600;
+  }
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  blockquote {
+    margin: 12px 0;
+    padding: 10px 16px;
+    border-left: 4px solid #2563eb;
+    background-color: #eff6ff;
+    color: #1e40af;
+    border-radius: 0 6px 6px 0;
+    page-break-inside: avoid;
+  }
+  .alert-important {
+    border-left-color: #d97706;
+    background-color: #fffbeb;
+    color: #92400e;
+  }
+  .alert-note {
+    border-left-color: #2563eb;
+    background-color: #eff6ff;
+    color: #1e40af;
+  }
+  .alert-tip {
+    border-left-color: #16a34a;
+    background-color: #f0fdf4;
+    color: #166534;
+  }
+  .alert-warning {
+    border-left-color: #dc2626;
+    background-color: #fef2f2;
+    color: #991b1b;
+  }
+  .diagram-box {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  .diagram-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .flow-step {
+    background-color: #ffffff;
+    border: 2px solid #2563eb;
+    color: #1e3a8a;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 10pt;
+    width: 80%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .flow-arrow {
+    color: #2563eb;
+    font-size: 14pt;
+    font-weight: bold;
+  }
+  .flow-split {
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+    gap: 12px;
+  }
+  .flow-substep {
+    flex: 1;
+    background-color: #eff6ff;
+    border: 1.5px dashed #2563eb;
+    color: #1e40af;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 9.5pt;
+  }
+  hr {
+    border: 0;
+    height: 1px;
+    background: #e2e8f0;
+    margin: 20px 0;
+  }
+  .footer-note {
+    margin-top: 30px;
+    font-size: 8.5pt;
+    color: #94a3b8;
+    text-align: center;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🔬 Fiber Bragg Grating (FBG) Sensing — ML Project: Complete Technical Deep-Dive</h1>
+
+<hr>
+
+<h2>1. What is this Project About? (The Physics)</h2>
+
+<h3>1.1 Fiber Bragg Grating (FBG) — The Sensor</h3>
+
+<p>A <strong>Fiber Bragg Grating</strong> is a type of optical sensor embedded inside a silica optical fiber. It works by having a periodic variation in the refractive index of the fiber core, which acts like a tiny mirror for a very specific wavelength of light — the <strong>Bragg wavelength</strong> (&lambda;<sub>B</sub>). All other wavelengths pass through.</p>
+
+<p>The key physics equation is:</p>
+
+<pre><code>&lambda;_B = 2 &middot; n_eff &middot; &Lambda;</code></pre>
+
+<p>where:</p>
+<ul>
+  <li><code>&lambda;_B</code> = reflected (Bragg) wavelength</li>
+  <li><code>n_eff</code> = effective refractive index of the fiber core</li>
+  <li><code>&Lambda;</code> = grating period (spacing between the refractive index variations)</li>
+</ul>
+
+<h3>1.2 Why FBGs Shift with Temperature and Strain</h3>
+
+<p>When the fiber is subjected to <strong>temperature change</strong> or <strong>mechanical strain</strong>, both <code>n_eff</code> and <code>&Lambda;</code> change, which causes the Bragg wavelength to shift:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stimulus</th>
+      <th>What happens physically</th>
+      <th>Effect on &lambda;<sub>B</sub></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Temperature &uarr;</strong></td>
+      <td>Thermal expansion increases &Lambda;; thermo-optic effect increases n_eff</td>
+      <td>&lambda;<sub>B</sub> <strong>increases</strong> (red-shift)</td>
+    </tr>
+    <tr>
+      <td><strong>Strain (tension)</strong></td>
+      <td>Fiber stretches &rarr; &Lambda; increases; photo-elastic effect changes n_eff</td>
+      <td>&lambda;<sub>B</sub> <strong>increases</strong> (red-shift)</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="alert-important">
+  <strong>The fundamental challenge</strong>: Both temperature and strain cause the Bragg wavelength to shift <em>in the same direction</em>. From a raw wavelength reading alone, you <strong>cannot tell</strong> whether the shift was caused by temperature, strain, or a combination of both. This is called the <strong>cross-sensitivity problem</strong> and is one of the biggest challenges in FBG sensing.
+</blockquote>
+
+<h3>1.3 The Goal of the Project</h3>
+
+<p>The project aims to use <strong>Machine Learning</strong> to:</p>
+<ol>
+  <li>Predict <strong>temperature</strong> from FBG wavelength data (Experiment 1)</li>
+  <li>Predict <strong>strain</strong> from FBG wavelength data (Experiment 2)</li>
+  <li>Simultaneously predict <strong>both temperature and strain</strong> from FBG wavelength data when both stimuli are present (Experiment 3 — the hardest case, addressing the cross-sensitivity problem)</li>
+</ol>
+
+<hr>
+
+<h2>2. The Experimental Data</h2>
+
+<h3>2.1 Three Datasets from Three Experiments</h3>
+
+<p>The project uses three CSV datasets, each from a real FBG experiment:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dataset</th>
+      <th>File</th>
+      <th>Stimulus</th>
+      <th>Rows</th>
+      <th>Physical Scenario</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Experiment 1</strong></td>
+      <td><code>TEMP_EXPERIMENT-1.csv</code></td>
+      <td>Temperature only</td>
+      <td>~3,055</td>
+      <td>FBG heated from ~20&deg;C to ~80&deg;C with no strain</td>
+    </tr>
+    <tr>
+      <td><strong>Experiment 2</strong></td>
+      <td><code>TEMP EXPERIMENT-2.csv</code></td>
+      <td>Strain only</td>
+      <td>~3,839</td>
+      <td>FBG mechanically strained from 0 to 1000 &mu;&epsilon; (microstrain) at constant temperature</td>
+    </tr>
+    <tr>
+      <td><strong>Experiment 3</strong></td>
+      <td><code>TEMP AND STRAIN EXPERIMENT-3.csv</code></td>
+      <td>Both simultaneously</td>
+      <td>~9,064</td>
+      <td>FBG subjected to both heating and strain at the same time</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2.2 Raw Data Columns</h3>
+
+<p>Each CSV has identical columns:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Time(sec)</code></td>
+      <td>Timestamp of the measurement (sampled at ~0.2s intervals = 5 Hz)</td>
+    </tr>
+    <tr>
+      <td><code>CH1</code>, <code>CH2</code>, <code>CH3</code>, <code>CH4</code></td>
+      <td>Channel flags (only CH1 = 1, the rest are 0; indicating only one FBG sensor was active)</td>
+    </tr>
+    <tr>
+      <td><code>Wavelength</code></td>
+      <td>The <strong>measured Bragg wavelength</strong> (in nm, around 1523&ndash;1524 nm)</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="alert-note">
+  <strong>Note</strong>: The wavelength values are in the <strong>1523&ndash;1524 nm</strong> range, which is a standard C-band telecom wavelength. The shifts are tiny — on the order of <strong>0.001 nm</strong> per reading change — which is why feature engineering is critical to extract meaningful patterns.
+</blockquote>
+
+<h3>2.3 A <code>session_id</code> Column is Added</h3>
+
+<p>The notebook adds a <code>session_id</code> column (1, 2, or 3) to tag which experiment each row belongs to. This is a bookkeeping step, not a feature used in modeling.</p>
+
+<hr>
+
+<h2>3. Data Quality Checks</h2>
+
+<h3>3.1 Null Value Inspection (Heatmap)</h3>
+
+<p>The notebook uses <code>sns.heatmap(df.isnull())</code> to visually check for missing values in all three datasets.</p>
+
+<p><strong>Why this technique?</strong> A seaborn heatmap of the isnull() matrix gives a quick, visual "picture" of where missing data lives. If any column/row had NaN values, they'd appear as a colored band.</p>
+
+<p><strong>Result</strong>: All three datasets have <strong>zero null values</strong> — the experimental equipment recorded complete data throughout.</p>
+
+<h3>3.2 Descriptive Statistics</h3>
+
+<p><code>df.describe()</code> is called on each dataset to examine:</p>
+<ul>
+  <li>Count, mean, std, min, 25th/50th/75th percentiles, max for each column</li>
+  <li>This confirms the data ranges are reasonable and there are no extreme outliers</li>
+</ul>
+
+<hr>
+
+<h2>4. Feature Engineering — The Core Technical Innovation</h2>
+
+<h3>4.1 Why Raw Wavelength Alone is Not Enough</h3>
+
+<p>The raw <code>Wavelength</code> column is a single time-series signal. Feeding a single number (wavelength at time t) to a regression model gives the model very little information to work with. It cannot see:</p>
+<ul>
+  <li><strong>Trends</strong> (is the wavelength going up or down?)</li>
+  <li><strong>Volatility</strong> (how noisy is the signal?)</li>
+  <li><strong>Distribution shape</strong> (is the signal symmetric or skewed?)</li>
+  <li><strong>Rate of change</strong> (how fast is the wavelength shifting?)</li>
+</ul>
+
+<h3>4.2 Sliding Window Feature Extraction</h3>
+
+<p>The function <code>sliding_features(x, windows=50)</code> is the <strong>heart of the feature engineering pipeline</strong>:</p>
+
+<pre><code>dt = 0.5
+def sliding_features(x, windows=50):
+    df = pd.DataFrame({'x': x})
+    df['mean']     = df['x'].rolling(windows).mean()
+    df['std']      = df['x'].rolling(windows).std()
+    df['slope']    = df['x'].diff(periods=5) / (dt * 5)
+    df['skew']     = df['x'].rolling(windows).skew()
+    df['kurtosis'] = df['x'].rolling(windows).kurt()
+    return df.dropna().reset_index(drop=True)</code></pre>
+
+<p>This creates <strong>5 new features</strong> from the raw wavelength signal using a sliding window of 50 samples:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Formula</th>
+      <th>Physical Meaning</th>
+      <th>Why It's Used</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>mean</strong></td>
+      <td>Rolling mean over 50 samples</td>
+      <td>The smoothed Bragg wavelength</td>
+      <td>Removes high-frequency noise; captures the underlying trend. The Bragg wavelength shifts proportionally with temperature/strain, so the smoothed value directly correlates with the physical stimulus.</td>
+    </tr>
+    <tr>
+      <td><strong>std</strong></td>
+      <td>Rolling standard deviation over 50 samples</td>
+      <td>Signal volatility/noise</td>
+      <td>Different temperature and strain conditions produce different levels of measurement noise. Noise increases when the system is in transition (e.g., temperature changing rapidly).</td>
+    </tr>
+    <tr>
+      <td><strong>slope</strong></td>
+      <td><code>diff(periods=5) / (dt * 5)</code> = rate of change over 5 time steps</td>
+      <td>How fast the wavelength is changing (nm/sec)</td>
+      <td>Captures the <em>dynamics</em> &mdash; a rapidly changing wavelength implies a rapidly changing stimulus. This is critical for time-series regression because it gives the model directional information.</td>
+    </tr>
+    <tr>
+      <td><strong>skew</strong></td>
+      <td>Rolling skewness over 50 samples</td>
+      <td>Asymmetry of the wavelength distribution</td>
+      <td>If the wavelength is trending in one direction, the distribution of recent values will be skewed. This helps distinguish steady-state from transient conditions.</td>
+    </tr>
+    <tr>
+      <td><strong>kurtosis</strong></td>
+      <td>Rolling kurtosis over 50 samples</td>
+      <td>"Tailedness" of the distribution</td>
+      <td>High kurtosis means extreme outlier readings are occurring (e.g., measurement spikes during rapid temperature changes). Helps characterize the stability of the measurement.</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="alert-tip">
+  <strong>Why a window of 50?</strong> With a 5 Hz sampling rate, 50 samples = 10 seconds of data. This is a reasonable time window for smoothing physical processes (temperature changes in lab settings are slow — minutes to hours). Too small a window &rarr; noisy features. Too large &rarr; features lag behind the actual physical changes.
+</blockquote>
+
+<blockquote class="alert-tip">
+  <strong>Why <code>diff(periods=5)</code> for slope?</strong> Differentiating adjacent samples amplifies noise. Using 5 sample spacing (1 second) provides a cleaner estimate of the rate of change while still being responsive enough to capture dynamics.
+</blockquote>
+
+<h3>4.3 The <code>shift</code> Feature</h3>
+
+<p>After the sliding window features, a <strong>wavelength shift</strong> column is added:</p>
+
+<pre><code>featured_temp['shift'] = featured_temp['Wavelength'] - featured_temp['Wavelength'].iloc[0]</code></pre>
+
+<p>This computes how far the current wavelength has moved from the <strong>initial reading</strong> (baseline).</p>
+
+<blockquote class="alert-important">
+  <strong>Why this is the most important feature</strong>: The Bragg wavelength shift (&Delta;&lambda;<sub>B</sub>) is <em>directly proportional</em> to temperature change (&Delta;T) and strain (&Delta;&epsilon;) by the fundamental FBG equation:<br>
+  <code>&Delta;&lambda;_B = &lambda;_B &middot; (&alpha; + &xi;) &middot; &Delta;T + &lambda;_B &middot; (1 - p<sub>e</sub>) &middot; &Delta;&epsilon;</code><br>
+  where &alpha; = thermal expansion coefficient, &xi; = thermo-optic coefficient, p<sub>e</sub> = photo-elastic constant.<br>
+  So <code>shift</code> is the single most physically meaningful feature for predicting temperature and strain.
+</blockquote>
+
+<h3>4.4 Final Feature Set</h3>
+
+<p>After feature engineering, each dataset has <strong>7 features</strong> per sample:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Feature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><code>Wavelength</code></td>
+      <td>Raw Bragg wavelength at time t</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code>mean</code></td>
+      <td>Rolling 50-sample mean</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code>std</code></td>
+      <td>Rolling 50-sample standard deviation</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code>slope</code></td>
+      <td>Rate of change (nm/sec)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code>skew</code></td>
+      <td>Rolling 50-sample skewness</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code>kurtosis</code></td>
+      <td>Rolling 50-sample kurtosis</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code>shift</code></td>
+      <td>Wavelength shift from baseline</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>5. Target Variable Construction</h2>
+
+<h3>5.1 Synthetic Labels</h3>
+
+<p>A critical detail: the datasets <strong>do not contain actual temperature/strain measurements</strong>. Instead, the target values are <strong>synthetically generated</strong> using <code>np.linspace()</code>:</p>
+
+<pre><code>y_temp    = np.linspace(20, 80, len(featured_temp))    # Temperature: 20°C → 80°C
+y_strain  = np.linspace(0, 1000, len(featured_strain))  # Strain: 0 → 1000 µε</code></pre>
+
+<blockquote class="alert-warning">
+  <strong>Major assumption</strong>: This assumes the temperature/strain changed <strong>perfectly linearly</strong> over the duration of each experiment. In reality, physical processes (heating, mechanical loading) rarely produce perfectly linear ramps. This is a simplification that could introduce systematic error into the model.
+</blockquote>
+
+<p>For Experiment 3 (both stimuli), both targets are stacked:</p>
+<pre><code>y_both = np.column_stack([y_temp_mix, y_strain_mix])</code></pre>
+<p>This creates a <strong>multi-output regression</strong> problem (predict 2 values simultaneously).</p>
+
+<hr>
+
+<h2>6. Model Selection & Training</h2>
+
+<h3>6.1 Method 1: Simple Train/Test Split with Linear Regression & Random Forest</h3>
+
+<h4>Train/Test Split</h4>
+<pre><code>train_test_split(x, y, test_size=0.2, random_state=50)</code></pre>
+<p>80% training, 20% testing, with a fixed random seed for reproducibility.</p>
+
+<h4>Models Used</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dataset</th>
+      <th>Model</th>
+      <th>Why This Model</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Temperature (Exp 1)</strong></td>
+      <td><code>LinearRegression</code></td>
+      <td>FBG wavelength shift is <em>linearly</em> proportional to temperature change (&Delta;T). This is physics-based model selection — the relationship is known to be linear, so linear regression is the natural first choice.</td>
+    </tr>
+    <tr>
+      <td><strong>Strain (Exp 2)</strong></td>
+      <td><code>LinearRegression</code></td>
+      <td>Similarly, wavelength shift is linearly proportional to strain (&Delta;&epsilon;). Same physics reasoning.</td>
+    </tr>
+    <tr>
+      <td><strong>Both (Exp 3)</strong></td>
+      <td><code>MultiOutputRegressor(RandomForestRegressor())</code></td>
+      <td>When both temperature and strain act simultaneously, the relationship becomes more complex (cross-sensitivity). A <strong>Random Forest</strong> was chosen because: (a) it can capture non-linear interactions between features, (b) it naturally handles multi-output regression via <code>MultiOutputRegressor</code>, and (c) it's robust to overfitting with default parameters.</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="alert-note">
+  <strong>Why not use Linear Regression for Experiment 3 too?</strong> Because with both stimuli acting simultaneously, the simple linear relationship breaks down. The cross-sensitivity means you need a model that can learn complex feature interactions. Random Forest builds many decision trees, each looking at different feature subsets, and averages their predictions — this gives it the ability to decompose the entangled temperature/strain signal.
+</blockquote>
+
+<h4>Method 1 Results</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dataset</th>
+      <th>MAE</th>
+      <th>MSE</th>
+      <th>RMSE</th>
+      <th>R&sup2; Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Temperature</strong></td>
+      <td>3.70</td>
+      <td>17.96</td>
+      <td>4.24</td>
+      <td><strong>94.37%</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Strain</strong></td>
+      <td>63.29</td>
+      <td>6465.36</td>
+      <td>80.41</td>
+      <td><strong>92.34%</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Both (combined)</strong></td>
+      <td>3.54</td>
+      <td>173.77</td>
+      <td>13.18</td>
+      <td><strong>99.59%</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="alert-note">
+  The "Both" dataset achieves higher R&sup2; than individual datasets because Random Forest is more powerful than Linear Regression and can exploit the richer feature interactions.
+</blockquote>
+
+<hr>
+
+<h3>6.2 Method 2: GroupKFold + GridSearchCV (Nested Cross-Validation)</h3>
+
+<p>This is the <strong>more rigorous</strong> approach.</p>
+
+<h4>Why GroupKFold Instead of Regular KFold?</h4>
+
+<pre><code>grp_temp = np.arange(len(featured_temp)) % 3</code></pre>
+
+<p>The data points are assigned to 3 groups cyclically (0, 1, 2, 0, 1, 2, ...). <code>GroupKFold</code> ensures that:</p>
+<ul>
+  <li>All data points in the same group go into either training OR testing, never both</li>
+  <li>This prevents <strong>temporal leakage</strong>: adjacent time points have nearly identical feature values (autocorrelation), so random splitting would put virtually identical points in both train and test sets, artificially inflating performance</li>
+</ul>
+
+<blockquote class="alert-important">
+  <strong>Why this matters</strong>: FBG time-series data is <strong>highly autocorrelated</strong> — the wavelength at time t is almost identical to the wavelength at time t+0.2s. If you do a random 80/20 split, the model "memorizes" the time-series and gets unrealistically high scores. GroupKFold with cyclical grouping forces the model to generalize across different time segments.
+</blockquote>
+
+<h4>GridSearchCV for Hyperparameter Tuning</h4>
+
+<pre><code>param_grid = {
+    "n_estimators": [100, 200, 300],
+    "max_depth": [5, 10, None]
+}
+model = RandomForestRegressor(random_state=42)
+inner_cv = GroupKFold(n_splits=2)
+grid = GridSearchCV(model, param_grid, cv=inner_cv, scoring="neg_mean_squared_error")</code></pre>
+
+<p>This searches over a grid of:</p>
+<ul>
+  <li><code>n_estimators</code> = [100, 200, 300] (number of trees in the forest)</li>
+  <li><code>max_depth</code> = [5, 10, None] (maximum depth of each tree)</li>
+</ul>
+
+<p><strong>Inner CV</strong> uses 2-fold GroupKFold to evaluate each hyperparameter combination, selecting the one with the lowest MSE.</p>
+
+<blockquote class="alert-note">
+  <strong>Why Random Forest for all three datasets in Method 2?</strong> In Method 1, Linear Regression was used for Experiments 1 & 2. In Method 2, <strong>all three</strong> use Random Forest with GridSearchCV. This is a deliberate upgrade — even though the physics is linear for single-stimulus cases, Random Forest can still capture these linear relationships while also being robust to any non-linearities in the engineered features.
+</blockquote>
+
+<h4>Method 2 Results (Random Forest + GridSearchCV + GroupKFold)</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dataset</th>
+      <th>MAE</th>
+      <th>MSE</th>
+      <th>RMSE</th>
+      <th>R&sup2; Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Temperature</strong></td>
+      <td>0.16</td>
+      <td>0.15</td>
+      <td>0.38</td>
+      <td><strong>99.951%</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Strain</strong></td>
+      <td>5.27</td>
+      <td>107.91</td>
+      <td>10.39</td>
+      <td><strong>99.870%</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Both (combined)</strong></td>
+      <td>2.22</td>
+      <td>47.44</td>
+      <td>6.89</td>
+      <td><strong>99.886%</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="alert-tip">
+  <strong>Dramatic improvement over Method 1!</strong> The R&sup2; scores jump from ~92-94% to ~99.9%. This is because:<br>
+  1. Random Forest captures non-linearities in the features better than Linear Regression<br>
+  2. GridSearchCV found optimal hyperparameters (the best model was <code>RandomForestRegressor(n_estimators=300, max_depth=None)</code> for all three datasets)<br>
+  3. The more structured cross-validation (GroupKFold) actually produces more honest and better-calibrated models
+</blockquote>
+
+<hr>
+
+<h2>7. Evaluation Metrics Explained</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Formula</th>
+      <th>Interpretation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MAE</strong> (Mean Absolute Error)</td>
+      <td><code>mean(|y_true - y_pred|)</code></td>
+      <td>Average absolute prediction error. Easy to interpret — "on average, the prediction is off by X units".</td>
+    </tr>
+    <tr>
+      <td><strong>MSE</strong> (Mean Squared Error)</td>
+      <td><code>mean((y_true - y_pred)&sup2;)</code></td>
+      <td>Average squared error. Penalizes large errors more heavily than small ones.</td>
+    </tr>
+    <tr>
+      <td><strong>RMSE</strong> (Root Mean Squared Error)</td>
+      <td><code>sqrt(MSE)</code></td>
+      <td>Same units as the target variable. More interpretable than MSE, still penalizes outlier errors.</td>
+    </tr>
+    <tr>
+      <td><strong>R&sup2; Score</strong></td>
+      <td><code>1 - SS_res / SS_tot</code></td>
+      <td>Proportion of variance explained by the model. 1.0 = perfect, 0.0 = no better than predicting the mean.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>8. Visualization</h2>
+
+<p>The final section of the notebook plots <strong>True vs Predicted</strong> values for all three datasets using the Method 2 (GridSearchCV) predictions. These scatter plots show:</p>
+<ul>
+  <li>x-axis: True (synthetic) temperature/strain values</li>
+  <li>y-axis: Predicted values</li>
+  <li>The closer the points to the y=x diagonal line, the better the model</li>
+</ul>
+
+<hr>
+
+<h2>9. Challenges & Limitations</h2>
+
+<h3>9.1 Cross-Sensitivity Problem</h3>
+<p>The biggest challenge in FBG sensing: both temperature and strain cause wavelength shifts in the same direction. The project addresses this by using multi-output Random Forest regression with rich feature engineering. The 99.886% R&sup2; on the "Both" dataset suggests this approach works well.</p>
+
+<h3>9.2 Synthetic Target Variables</h3>
+<p>The target values (temperature, strain) are generated with <code>np.linspace()</code>, assuming perfectly linear ramps. In real-world applications, the actual temperature/strain values would come from reference sensors (thermocouples, strain gauges), which would introduce their own measurement uncertainties.</p>
+
+<h3>9.3 No External Validation</h3>
+<p>The model is trained and tested on data from the same experimental session. A truly robust model would need to be validated on data from <strong>different</strong> experiments, different FBG sensors, or different environmental conditions.</p>
+
+<h3>9.4 Feature Engineering Assumptions</h3>
+<ul>
+  <li>The 50-sample rolling window is hand-tuned and may not be optimal for all scenarios</li>
+  <li>The slope calculation uses a fixed <code>dt = 0.5</code> (not the actual time delta between samples, which is ~0.2s) — this means the slope values are scaled differently than the actual physical rate of change</li>
+</ul>
+
+<h3>9.5 Temporal Autocorrelation</h3>
+<p>Even with GroupKFold, the cyclical grouping (<code>% 3</code>) still allows "nearby" time points to leak across folds. A more rigorous approach would use <strong>time-based splits</strong> (train on first 70%, test on last 30%) or blocked cross-validation.</p>
+
+<hr>
+
+<h2>10. Project Architecture Summary</h2>
+
+<div class="diagram-box">
+  <div class="diagram-flow">
+    <div class="flow-step">Raw FBG Data (3 CSV files)</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">Data Loading & Tagging (session_id)</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">Data Quality Checks (Null heatmap, describe())</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">Feature Engineering (sliding_features function)</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">6 Features per sample: Wavelength, mean, std, slope, skew, kurtosis</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">Add 'shift' feature (&Delta;&lambda; from baseline)</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">Target Variable Construction (np.linspace synthetic labels)</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-split">
+      <div class="flow-substep"><strong>Method 1</strong><br>train_test_split<br>LinearRegression / RandomForest</div>
+      <div class="flow-substep"><strong>Method 2</strong><br>GroupKFold + GridSearchCV<br>RandomForest</div>
+    </div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">Evaluation (MAE, MSE, RMSE, R&sup2;)</div>
+    <div class="flow-arrow">&darr;</div>
+    <div class="flow-step">Visualization (True vs Predicted plots)</div>
+  </div>
+</div>
+
+<hr>
+
+<h2>11. Technology Stack</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Library/Tool</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Data handling</td>
+      <td><code>pandas</code>, <code>numpy</code></td>
+    </tr>
+    <tr>
+      <td>Visualization</td>
+      <td><code>seaborn</code>, <code>matplotlib</code></td>
+    </tr>
+    <tr>
+      <td>ML Models</td>
+      <td><code>sklearn.linear_model.LinearRegression</code><br><code>sklearn.ensemble.RandomForestRegressor</code><br><code>sklearn.multioutput.MultiOutputRegressor</code></td>
+    </tr>
+    <tr>
+      <td>Validation</td>
+      <td><code>sklearn.model_selection.train_test_split</code><br><code>sklearn.model_selection.GroupKFold</code><br><code>sklearn.model_selection.GridSearchCV</code></td>
+    </tr>
+    <tr>
+      <td>Metrics</td>
+      <td><code>sklearn.metrics.mean_absolute_error</code><br><code>sklearn.metrics.mean_squared_error</code><br><code>sklearn.metrics.r2_score</code></td>
+    </tr>
+    <tr>
+      <td>Environment</td>
+      <td>Jupyter Notebook</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>12. Key Takeaways</h2>
+
+<ol>
+  <li><strong>Feature engineering is everything</strong>: The raw wavelength signal is nearly useless on its own. The sliding window statistical features (mean, std, slope, skew, kurtosis) and the baseline shift transform a single noisy time-series into a rich 7-dimensional feature space that ML models can effectively learn from.</li>
+  <li><strong>Model selection should be guided by physics</strong>: Linear Regression for single-stimulus (linear physics), Random Forest for multi-stimulus (cross-sensitivity &rarr; non-linear interactions).</li>
+  <li><strong>Proper cross-validation is critical for time-series data</strong>: Simple random splitting overestimates performance. GroupKFold prevents temporal leakage.</li>
+  <li><strong>Hyperparameter tuning matters</strong>: GridSearchCV improved R&sup2; from ~94% to ~99.9% for temperature prediction by finding optimal Random Forest parameters.</li>
+  <li><strong>The cross-sensitivity challenge is solvable with ML</strong>: The 99.886% R&sup2; on simultaneous temperature + strain prediction demonstrates that ML feature engineering can decode the entangled wavelength signal — something that is extremely difficult with traditional analytical methods.</li>
+</ol>
+
+<div class="footer-note">
+  Fiber Bragg Grating (FBG) Sensing — ML Project Technical Analysis &bull; Generated for Project Documentation
+</div>
+
+</div>
+</body>
+</html>
