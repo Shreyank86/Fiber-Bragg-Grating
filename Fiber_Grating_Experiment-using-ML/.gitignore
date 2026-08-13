@@ -1,20 +1,22 @@
-.DS_Store
-Thumbs.db
-
+# Python bytecode & cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 .ipynb_checkpoints/
 
+# Environments
 .venv/
 env/
 venv/
 ENV/
 
+# Large model binaries (>50MB)
+*.joblib
+
+# Logs & OS files
 *.log
 *.tmp
-*.bak
-
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
