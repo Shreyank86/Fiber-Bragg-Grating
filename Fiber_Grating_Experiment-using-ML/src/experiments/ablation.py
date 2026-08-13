@@ -10,7 +10,7 @@ def run_ablation_study(lambdas=[0.0, 0.01, 0.1, 1.0, 10.0]):
     
     results = []
     for l_val in lambdas:
-        pinn = PINNModel(lambda_phys=l_val)
+        pinn = PINNModel(lambda_phys=l_val, epochs=100, batch_size=128)
         pinn.fit(X_train_s, y_train)
         m = pinn.evaluate(X_test_s, y_test)
         

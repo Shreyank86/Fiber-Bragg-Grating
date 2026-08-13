@@ -30,6 +30,11 @@ def run_benchmark():
     for name, model in models.items():
         print(f"\nTraining {name}...")
         model.fit(X_train_s, y_train)
+        if hasattr(model, "save_model"):
+            try:
+                model.save_model()
+            except Exception as e:
+                print(f"Warning: Could not save model {name}: {e}")
         metrics = model.evaluate(X_test_s, y_test)
         print_metrics_summary(name, metrics)
         metrics["Model"] = name
