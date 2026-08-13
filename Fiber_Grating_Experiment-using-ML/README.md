@@ -1,42 +1,33 @@
-# Fiber Bragg Grating (FBG) Strain-Temperature Decoupling via ML + PINN
+# Fiber Bragg Grating (FBG) Strain-Temperature Decoupling via Physics-Informed Neural Networks (PINN)
 
-This repository implements a **Physics-Guided Inverse Sensing Framework** to solve single-sensor FBG strain and temperature cross-sensitivity decoupling.
+This subfolder contains the complete implementation, datasets, model binaries, experimental scripts, and visualization engine for the FBG Strain-Temperature Decoupling project.
+
+---
 
 ## 👥 Team Work Division
 
-- **Member 1 (Project Lead / User)**: Support Vector Regression ([src/models/svr.py](file:///c:/Users/raksh/OneDrive/Desktop/FBG/Fiber_Grating_Experiment-using-ML/src/models/svr.py))
-- **Member 2 (Siddharth)**: Multi-Layer Perceptron ([src/models/mlp.py](file:///c:/Users/raksh/OneDrive/Desktop/FBG/Fiber_Grating_Experiment-using-ML/src/models/mlp.py))
-- **Member 3 (Shreyank)**: Gaussian Process Regression ([src/models/gpr.py](file:///c:/Users/raksh/OneDrive/Desktop/FBG/Fiber_Grating_Experiment-using-ML/src/models/gpr.py)) & PINN ([src/models/pinn.py](file:///c:/Users/raksh/OneDrive/Desktop/FBG/Fiber_Grating_Experiment-using-ML/src/models/pinn.py))
+- **Member 1 (Rakshith - Project Lead)**: Support Vector Regression ([src/models/svr.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/svr.py))
+- **Member 2 (Siddharth)**: Multi-Layer Perceptron ([src/models/mlp.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/mlp.py))
+- **Member 3 (Shreyank)**: Gaussian Process Regression ([src/models/gpr.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/gpr.py)) & Measurement-Constrained PINN ([src/models/pinn.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/pinn.py))
 
 ---
 
-## 📁 Repository Structure
+## 📊 Summary of Benchmark Results
 
-```
-Fiber_Grating_Experiment-using-ML/
-├── .agents/skills/fbg-pinn-framework/SKILL.md  # Custom workspace skill context
-├── Dataset/                                     # Raw FBG sensor CSV datasets
-├── src/
-│   ├── data_loader.py                           # Sliding window feature extractor & leak-free scaler
-│   ├── physics.py                               # Physical forward equations & sensitivity constants
-│   ├── evaluation.py                            # Metric evaluators (MAE, RMSE, R2, Latency)
-│   ├── models/                                  # Model implementations (LR, RF, SVR, MLP, GPR, PINN)
-│   └── experiments/                             # Experiment runners (Benchmark, Noise, Small Data, Ablation)
-├── run_experiments.py                           # Master experiment suite runner
-├── requirements.txt                             # Dependencies
-└── README.md
-```
+| Model | MAE | RMSE | $R^2$ Score (%) | Train Time (s) | Infer Latency (ms) |
+|---|---|---|---|---|---|
+| **PINN (Proposed)** | **14.17** | **28.11** | **98.14%** | **77.32 s** | **5.51 ms** |
+| Random Forest | 3.15 | 10.99 | 99.71% | 34.95 s | 364.28 ms |
+| MLP (Member 2) | 25.77 | 47.74 | 93.75% | 22.15 s | 1.60 ms |
+| SVR (Member 1) | 60.33 | 111.17 | 72.99% | 1.38 s | 1035.96 ms |
+| Linear Regression | 74.28 | 118.41 | 66.22% | 0.002 s | 0.00 ms |
+| GPR (Member 3) | 131.66 | 203.91 | Probabilistic | 7.44 s | 368.67 ms |
 
 ---
 
-## 🚀 How to Run
+## 🚀 Reproduction Command
 
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. Run master evaluation suite:
-   ```bash
-   python run_experiments.py
-   ```
+```bash
+python run_experiments.py
+```
+Executing this script will train/evaluate all 6 models, compute statistical cross-validation and bootstrap intervals, and regenerate all 8 CSV tables and 7 publication-quality PNG figures in `results/`.
