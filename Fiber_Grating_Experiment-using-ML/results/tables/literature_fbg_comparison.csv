@@ -1,0 +1,8 @@
+Method,Hardware_Required,Decoupling_Mechanism,Requires_Auxiliary_Sensor,Noise_Robustness,Data_Efficiency,Physical_Consistency
+Single FBG,1 FBG Sensor,Analytical Over-determined Matrix,No,Low,High,Exact Analytical
+Dual FBG,2 FBG Sensors (Differential),Differential Wavelength Shift,Yes (2nd FBG),Moderate,N/A,High
+FBG + Thermocouple,1 FBG + 1 Thermocouple,Direct Temperature Compensation,Yes (Thermocouple),High,N/A,High
+Classical ANN / MLP,1 FBG Sensor,Pure Black-box Data Regression,No,Low (Fails >5% Noise),Low (Requires Large Dataset),None (Black-box)
+Support Vector Regression (SVR),1 FBG Sensor,Kernelized Structural Risk Minimization,No,Moderate,Moderate,None (Black-box)
+Gaussian Process Regression (GPR),1 FBG Sensor,Bayesian Non-parametric Regression,No,Moderate,Moderate (Provides Uncertainty Bounds),Statistical Only
+Proposed Inverse Measurement PINN,1 FBG Sensor,Physics-Guided Dual-Loss Optimization,No (Single Sensor),High (Maintains 67.5% R² at 10% Noise),High (96.6% R² at 40% Data),Enforced via FBG Sensitivity Equations
