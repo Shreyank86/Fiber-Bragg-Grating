@@ -20,9 +20,9 @@ def run_benchmark():
     models = {
         "Linear Regression": LinearRegressionModel(),
         "Random Forest": RandomForestModel(),
-        "SVR (Member 1)": SVRModel(),
-        "MLP (Member 2)": MLPModel(),
-        "GPR (Member 3)": GPRModel(),
+        "Support Vector Regression": SVRModel(),
+        "Multi-Layer Perceptron": MLPModel(),
+        "Gaussian Process Regression": GPRModel(),
         "PINN (Proposed)": PINNModel()
     }
     

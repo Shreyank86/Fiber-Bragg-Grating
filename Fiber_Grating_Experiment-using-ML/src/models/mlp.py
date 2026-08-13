@@ -6,7 +6,7 @@ from src.evaluation import evaluate_predictions
 
 class MLPModel:
     """
-    Multi-Layer Perceptron (MLP) pure data-driven model for Member 2.
+    Multi-Layer Perceptron (MLP) baseline model.
     Uses 2 hidden layers (64, 32) with ReLU activation and Adam optimizer.
     """
     def __init__(self, hidden_layer_sizes=(64, 32), activation='relu', max_iter=500, random_state=42, **kwargs):
@@ -29,7 +29,7 @@ class MLPModel:
     def predict(self, X_test):
         start_time = time.time()
         y_pred = self.model.predict(X_test)
-        self.infer_time = (time.time() - start_time) * 1000.0  # ms
+        self.infer_time = (time.time() - start_time) * 1000.0
         return y_pred
 
     def evaluate(self, X_test, y_test):
@@ -45,4 +45,3 @@ class MLPModel:
         self.model = joblib.load(filepath)
         print(f"MLP Model loaded from: {filepath}")
         return self
-

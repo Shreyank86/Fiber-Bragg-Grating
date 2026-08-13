@@ -6,14 +6,6 @@ By embedding the analytical FBG Bragg wavelength shift equation ($\Delta \lambda
 
 ---
 
-## 👥 Team Work Assignments & Contributions
-
-- **Member 1 (Rakshith - Project Lead)**: Support Vector Regression ([src/models/svr.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/svr.py))
-- **Member 2 (Siddharth)**: Multi-Layer Perceptron ([src/models/mlp.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/mlp.py))
-- **Member 3 (Shreyank)**: Gaussian Process Regression with Uncertainty Quantification ([src/models/gpr.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/gpr.py)) & Measurement-Constrained PINN ([src/models/pinn.py](file:///c:/Users/shrey/Desktop/Project/fiber-bragg-grating/Fiber_Grating_Experiment-using-ML/src/models/pinn.py))
-
----
-
 ## 📊 Benchmarking & Experimental Results
 
 ### 1. Master Model Comparison (`results/tables/benchmark_comparison.csv`)
@@ -22,10 +14,10 @@ By embedding the analytical FBG Bragg wavelength shift equation ($\Delta \lambda
 |---|---|---|---|---|---|---|
 | **PINN (Proposed)** | **14.17** | **28.11** | **98.14%** | **77.32 s** | **5.51 ms** | **Physics-Guided & Noise Robust** |
 | Random Forest | 3.15 | 10.99 | 99.71% | 34.95 s | 364.28 ms | Ensemble baseline |
-| MLP (Member 2) | 25.77 | 47.74 | 93.75% | 22.15 s | 1.60 ms | Pure data neural network |
-| SVR (Member 1) | 60.33 | 111.17 | 72.99% | 1.38 s | 1035.96 ms | Structural risk minimization |
+| Multi-Layer Perceptron | 25.77 | 47.74 | 93.75% | 22.15 s | 1.60 ms | Pure data neural network |
+| Support Vector Regression | 60.33 | 111.17 | 72.99% | 1.38 s | 1035.96 ms | Structural risk minimization |
 | Linear Regression | 74.28 | 118.41 | 66.22% | 0.002 s | 0.00 ms | Baseline linear reference |
-| GPR (Member 3) | 131.66 | 203.91 | Probabilistic | 7.44 s | 368.67 ms | 95% Confidence Bounds ($\pm 1.96\sigma$) |
+| Gaussian Process Regression | 131.66 | 203.91 | Probabilistic | 7.44 s | 368.67 ms | 95% Confidence Bounds ($\pm 1.96\sigma$) |
 
 ---
 

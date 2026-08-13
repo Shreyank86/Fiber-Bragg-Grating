@@ -189,7 +189,7 @@ def plot_cross_validation_boxplot(fold_results, save_path=None):
     df_box = pd.DataFrame(data_list)
     
     plt.figure(figsize=(10, 6))
-    sns.boxplot(x="Model", y="R2_Score", data=df_box, palette="Set2")
+    sns.boxplot(x="Model", y="R2_Score", data=df_box, hue="Model", palette="Set2", legend=False)
     sns.stripplot(x="Model", y="R2_Score", data=df_box, color='black', alpha=0.6, jitter=True)
     
     plt.title("5-Fold Cross Validation R² Score Distribution Across Models", fontsize=12, fontweight='bold')
@@ -208,7 +208,7 @@ def plot_parity_plots(y_test, y_pred_pinn, y_pred_mlp, save_path=None):
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     
     # Temperature Parity
-    axes[0].scatter(y_test[:, 0], y_pred_mlp[:, 0], alpha=0.5, label='MLP (Member 2)', color='orange', s=20)
+    axes[0].scatter(y_test[:, 0], y_pred_mlp[:, 0], alpha=0.5, label='Multi-Layer Perceptron', color='orange', s=20)
     axes[0].scatter(y_test[:, 0], y_pred_pinn[:, 0], alpha=0.5, label='PINN (Proposed)', color='teal', s=20)
     axes[0].plot([20, 80], [20, 80], 'k--', label='Ideal 1:1 Line')
     axes[0].set_title("Temperature Parity Plot (°C)", fontweight='bold')
@@ -218,7 +218,7 @@ def plot_parity_plots(y_test, y_pred_pinn, y_pred_mlp, save_path=None):
     axes[0].grid(True, linestyle='--', alpha=0.6)
 
     # Strain Parity
-    axes[1].scatter(y_test[:, 1], y_pred_mlp[:, 1], alpha=0.5, label='MLP (Member 2)', color='orange', s=20)
+    axes[1].scatter(y_test[:, 1], y_pred_mlp[:, 1], alpha=0.5, label='Multi-Layer Perceptron', color='orange', s=20)
     axes[1].scatter(y_test[:, 1], y_pred_pinn[:, 1], alpha=0.5, label='PINN (Proposed)', color='teal', s=20)
     axes[1].plot([0, 1000], [0, 1000], 'k--', label='Ideal 1:1 Line')
     axes[1].set_title("Strain Parity Plot (µε)", fontweight='bold')

@@ -29,9 +29,9 @@ def run_cross_validation(n_splits=5):
     model_factories = {
         "Linear Regression": lambda: LinearRegressionModel(),
         "Random Forest": lambda: RandomForestModel(),
-        "SVR (Member 1)": lambda: SVRModel(),
-        "MLP (Member 2)": lambda: MLPModel(),
-        "GPR (Member 3)": lambda: GPRModel(),
+        "Support Vector Regression": lambda: SVRModel(),
+        "Multi-Layer Perceptron": lambda: MLPModel(),
+        "Gaussian Process Regression": lambda: GPRModel(),
         "PINN (Proposed)": lambda: PINNModel(epochs=100, batch_size=128)
     }
     
@@ -97,7 +97,7 @@ def run_bootstrap_analysis(n_bootstraps=200):
     np.random.seed(42)
     
     boot_rows = []
-    for model_name, y_pred in [("PINN (Proposed)", y_pred_pinn), ("GPR (Member 3)", y_pred_gpr)]:
+    for model_name, y_pred in [("PINN (Proposed)", y_pred_pinn), ("Gaussian Process Regression", y_pred_gpr)]:
         r2_scores = []
         rmse_scores = []
         for _ in range(n_bootstraps):
