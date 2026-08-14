@@ -1,0 +1,32 @@
+# Node.js Dependencies for PINN FBG Sensor Dashboard
+# Install Node.js (v18 or higher) first from https://nodejs.org/
+
+# Core Dependencies
+react@^18.2.0
+react-dom@^18.2.0
+
+# UI Framework
+@mui/material@^5.15.0
+@mui/icons-material@^5.15.0
+@emotion/react@^11.11.1
+@emotion/styled@^11.11.0
+
+# Data Visualization
+recharts@^2.10.3
+
+# Data Processing
+papaparse@^5.4.1
+
+# Development Dependencies
+@types/react@^18.2.43
+@types/react-dom@^18.2.17
+@types/papaparse@^5.3.14
+@vitejs/plugin-react@^4.2.1
+typescript@^5.2.2
+vite@^5.0.8
+
+# Installation Instructions:
+# 1. Make sure Node.js (v18+) is installed: https://nodejs.org/
+# 2. Run: npm install
+#    (This will automatically install all dependencies from package.json)
+

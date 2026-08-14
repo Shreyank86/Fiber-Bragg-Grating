@@ -1,0 +1,16 @@
+\begin{table}[h]
+\centering
+\caption{Methodological Feature Comparison Between Proposed PINN and Literature Decoupling Schemes}
+\label{tab:literature_comparison}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Method} & \textbf{Single FBG} & \textbf{AI Model} & \textbf{Physics Loss} & \textbf{Experimental} \\ \hline
+Dual FBG Matrix Inversion & No & No & Yes & Yes \\
+FBG + Thermocouple & No & No & Yes & Yes \\
+Standard ANN / MLP & Yes & Yes & No & Yes \\
+Support Vector Regression & Yes & Yes & No & Yes \\
+Random Forest Regression & Yes & Yes & No & Yes \\
+Gaussian Process Regression & Yes & Yes & Partial & Yes \\
+\textbf{Proposed PINN Framework} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\ \hline
+\end{tabular}
+\end{table}

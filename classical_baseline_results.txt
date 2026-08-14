@@ -1,0 +1,5 @@
+kε (strain sensitivity): -0.0009 pm/sec
+kT (temperature sensitivity): 0.0001 pm/sec
+MAE: 0.38 pm
+RMSE: 0.43 pm
+R²: -1.122

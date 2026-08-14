@@ -1,0 +1,14 @@
+\begin{table}[h]
+\centering
+\caption{Ablation Study Evaluating the Role of Physics Loss Weight \lambda}
+\label{tab:ablation_study}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Model Variant} & \textbf{\lambda} & \textbf{MAE (pm)} & \textbf{RMSE (pm)} & \textbf{$R^2$} \\ \hline
+NN (No Physics) & 0.0 & 0.4175 & 0.5353 & 1.0000 \\
+PINN (λ=0.1) & 0.1 & 0.4175 & 0.5353 & 1.0000 \\
+PINN (λ=1.0) & 1.0 & 0.4170 & 0.5365 & 1.0000 \\
+PINN (λ=10.0) & 10.0 & 0.4168 & 0.5362 & 1.0000 \\
+\hline
+\end{tabular}
+\end{table}

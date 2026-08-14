@@ -1,0 +1,16 @@
+\begin{table}[h]
+\centering
+\caption{Measurement-Constrained PINN Architecture and Hyperparameters}
+\label{tab:hyperparameters}
+\begin{tabular}{lc}
+\hline
+\textbf{Hyperparameter} & \textbf{Specification} \\ \hline
+Input Dimensionality & 2 ($t$, $\Delta\lambda$) \\
+Hidden Layers & 3 Dense Layers (64, 64, 32 units) \\
+Activation Function & ReLU \\
+Output Dimensions & 2 (\hat{\varepsilon}, \hat{T}) \\
+Physics Loss Weight (\lambda) & 1.0 \\
+Optimizer & Adam (lr = 10^{-3}) \\
+Epochs & 500 \\ \hline
+\end{tabular}
+\end{table}
