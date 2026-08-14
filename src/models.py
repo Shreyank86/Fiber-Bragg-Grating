@@ -74,9 +74,9 @@ class ClassicalMLBaselines:
             }
             self.fitted_models[name] = model
 
-            # Save model artifact to saved_models directory
+            # Save model artifact to saved_models directory with compression
             model_filename = name.lower().replace(" ", "_") + ".pkl"
             save_path = os.path.join(SAVED_MODELS_DIR, model_filename)
-            joblib.dump(model, save_path)
+            joblib.dump(model, save_path, compress=3)
 
         return results
