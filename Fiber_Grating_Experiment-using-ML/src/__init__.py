@@ -1,4 +1,0 @@
-"""
-FBG Sensor ML + PINN Framework Package
-"""
-__version__ = "1.0.0"
