@@ -1,16 +1,72 @@
 # Measurement-Constrained PINN for FBG Sensor Strain–Temperature Decoupling
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
-[![TensorFlow 2.x](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://tensorflow.org)
+[![PyTorch 2.x](https://img.shields.io/badge/PyTorch-2.x-red.svg)](https://pytorch.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-This repository contains the complete implementation, benchmarking suite, documentation, and automated figure/table generation pipelines for **Measurement-Constrained Physics-Informed Neural Networks (MC-PINNs)** applied to Fiber Bragg Grating (FBG) optical sensor strain–temperature decoupling.
+This repository presents a **Physics-Guided Inverse Sensing Framework** and **Measurement-Constrained Physics-Informed Neural Network (MC-PINN)** for single-sensor Fiber Bragg Grating (FBG) strain–temperature cross-sensitivity decoupling.
 
-> **Strict Non-Destructive Guarantee**: All original raw datasets and notebooks (such as `Internship_PINN.ipynb` and `TEMP_STRAIN_CSV.csv`) remain 100% untouched to ensure total historical reproducibility.
+By embedding the analytical FBG Bragg wavelength shift equation ($\Delta \lambda_B = k_\varepsilon \cdot \varepsilon + k_T \cdot \Delta T$) directly into the neural network loss function, this project formulates strain-temperature separation as an **inverse measurement problem**, enabling accurate, physically consistent strain and temperature prediction without auxiliary sensing hardware.
+
+> **Strict Non-Destructive Guarantee**: All original raw datasets and notebooks (such as `Internship_PINN.ipynb` and `TEMP_STRAIN_CSV.csv`) remain 100% untouched to ensure historical reproducibility.
 
 ---
 
-## 📁 Repository Structure
+## 📊 Benchmarking & Experimental Results
+
+### 1. Master Model Comparison (`outputs/tables/table3_baseline_comparison.md`)
+
+| Model | MAE (pm) | RMSE (pm) | $R^2$ Score | Training Time (s) | Inference Latency (s) | Key Feature |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Proposed MC-PINN** | **0.3897** | **0.4993** | **1.0000** | **5.068 s** | **0.0012 s** | **Physics-Guided & Noise Robust** |
+| **Random Forest** | 1.8645 | 6.7924 | 0.9995 | 0.1938 s | 0.0310 s | Ensemble baseline |
+| **Multi-Layer Perceptron (MLP)** | 20.9321 | 44.1278 | 0.9780 | 7.2624 s | 0.0031 s | Pure data neural network |
+| **Support Vector Regression (SVR)** | 22.9181 | 47.2421 | 0.9748 | 1.4724 s | 0.6307 s | Structural risk minimization |
+| **Linear Regression** | 147.3706 | 173.6049 | 0.6591 | 0.0008 s | 0.0001 s | Baseline linear reference |
+| **Gaussian Process Regression** | 691.0143 | 751.1688 | -5.3814 | 0.5376 s | 0.0579 s | Probabilistic ($\pm 1.96\sigma$) |
+
+---
+
+### 2. Multi-Model Noise Robustness under Gaussian Noise (`outputs/tables/table6_noise_robustness.md`)
+
+| Noise Level (%) | Proposed PINN MAE (pm) | Proposed PINN RMSE (pm) | Proposed PINN $R^2$ | Key Observation |
+| :--- | :--- | :--- | :--- | :--- |
+| **0.0% (Clean)** | 0.4441 | 0.5846 | 1.0000 | Perfect Physical Alignment |
+| **1.0% Noise** | 2.4182 | 3.0586 | 0.9999 | High Precision Baseline |
+| **3.0% Noise** | 7.1115 | 8.9995 | 0.9991 | Robust Trajectory |
+| **5.0% Noise** | 11.8343 | 14.9702 | 0.9975 | Resists Degradation |
+| **10.0% Noise** | 23.6499 | 29.9102 | 0.9899 | **Degrades Gracefully** |
+
+---
+
+### 3. Limited Data Regime Efficiency (`outputs/tables/table7_small_data_experiment.md`)
+
+| Training Data (%) | Proposed PINN MAE (pm) | Proposed PINN RMSE (pm) | Proposed PINN $R^2$ | Key Observation |
+| :--- | :--- | :--- | :--- | :--- |
+| **20% Data** | 1.2030 | 1.5169 | 1.0000 | **High accuracy at only 20% training data** |
+| **40% Data** | 0.9866 | 1.2398 | 1.0000 | Consistent small-data convergence |
+| **60% Data** | 1.5769 | 2.2070 | 0.9999 | Stable out-of-sample performance |
+| **80% Data** | 1.5267 | 2.1319 | 0.9999 | Near-optimal performance |
+| **100% Data** | 0.4441 | 0.5846 | 1.0000 | Full dataset optimal |
+
+---
+
+## 🖼️ Publication Figures Suite (`outputs/figures/`)
+
+- `training_loss.png`: Training loss vs epoch (*Labeled: Proposed Measurement-Constrained PINN*).
+- `validation_loss.png`: Validation loss vs epoch (*Labeled: Proposed Measurement-Constrained PINN*).
+- `prediction_vs_gt.png`: **Parity Scatter Plot ($y=x$)** comparing Actual $\Delta\lambda$ vs Predicted $\Delta\lambda$ with ideal reference line and sorted time series panel.
+- `residual_histogram.png`: Residual error distributions comparing PINN predictions.
+- `rmse_comparison.png`, `mae_comparison.png`, `r2_comparison.png`: Bar charts with **exact numerical value callouts on top of every bar**.
+- `noise_robustness.png`: Multi-model degradation curves under 0% to 10% Gaussian noise.
+- `small_data_experiment.png`: Multi-model data efficiency curves across 20% to 100% training data.
+- `lambda_ablation.png`: Performance sensitivity trends across physics loss weight $\lambda$.
+- `cv_boxplot.png`: 5-Fold Cross-Validation metric distributions.
+- `bootstrap_ci.png`: **Gaussian Normal Distribution Bell Curves (KDE)** with shaded 95% Confidence Interval bands.
+
+---
+
+## 📁 Repository Directory Structure
 
 ```
 FBG-Sensor-PINN/
@@ -20,13 +76,13 @@ FBG-Sensor-PINN/
 ├── TEMP_STRAIN_CSV.csv           # Original Dataset (UNTOUCHED)
 ├── Week1_combined_final.csv      # Original Dataset (UNTOUCHED)
 │
-├── saved_models/                          # Saved Trained Model Files (.pkl, .h5, .npz)
+├── saved_models/                          # Saved Trained Model Files (.pkl, .pt, .npz)
 │   ├── linear_regression.pkl
 │   ├── random_forest.pkl
 │   ├── svr.pkl
 │   ├── mlp.pkl
 │   ├── gaussian_process.pkl
-│   ├── pinn_model.h5
+│   ├── pinn_model.pt
 │   └── pinn_predictions.npz
 │
 ├── docs/                                  # Repository Documentation
@@ -59,7 +115,7 @@ FBG-Sensor-PINN/
 │   └── conclusion_and_future_work.md      # Phase 17 & 18: Conclusion & 9 Future Directions
 │
 └── outputs/                               # Generated Outputs
-    ├── figures/                           # 13 Publication-Quality PNG Figures
+    ├── figures/                           # 12 Publication-Quality PNG Figures
     ├── tables/                            # 9 LaTeX (.tex) and Markdown (.md) Tables
     └── results.json                       # Comprehensive Benchmark Metrics JSON File
 ```
@@ -95,19 +151,6 @@ python scripts/generate_figures.py
 python scripts/generate_tables.py
 ```
 Outputs will be saved in `outputs/figures/` and `outputs/tables/`.
-
----
-
-## 📊 Benchmark Results
-
-| Model | MAE (pm) | RMSE (pm) | R² Score | Training Time (s) |
-| :--- | :--- | :--- | :--- | :--- |
-| **Linear Regression** | Baseline | Baseline | Baseline | < 0.01 s |
-| **Random Forest** | Evaluated | Evaluated | Evaluated | ~ 1.50 s |
-| **Support Vector Regression (SVR)** | Evaluated | Evaluated | Evaluated | ~ 0.80 s |
-| **Multi-Layer Perceptron (MLP)** | Evaluated | Evaluated | Evaluated | ~ 2.10 s |
-| **Gaussian Process Regression** | Evaluated | Evaluated | Evaluated | ~ 8.50 s |
-| **Proposed Measurement-Constrained PINN** | **Superior** | **Superior** | **Superior** | ~ 4.20 s |
 
 ---
 

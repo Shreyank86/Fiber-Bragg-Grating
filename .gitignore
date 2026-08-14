@@ -1,13 +1,19 @@
-# Python
-venv/
-env/
-ENV/
-.venv
+# Python bytecode & cache
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Environments
+venv/
+env/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Build & Eggs
 build/
 develop-eggs/
 dist/
@@ -25,10 +31,6 @@ wheels/
 *.egg
 MANIFEST
 
-# Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb_checkpoints
-
 # Frontend (React/Node)
 frontend/node_modules/
 frontend/dist/
@@ -42,45 +44,32 @@ frontend/.env.production.local
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
-# frontend/package-lock.json (usually committed, but uncomment if you want to ignore)
 frontend/yarn.lock
 frontend/pnpm-lock.yaml
 
-# IDE
+# IDE & OS files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+Thumbs.db
+desktop.ini
 *.sublime-project
 *.sublime-workspace
 
-# OS
-Thumbs.db
-.DS_Store
-desktop.ini
-
-# Logs
+# Logs & Temporary files
 *.log
 logs/
-
-# Environment variables
-.env
-.env.local
-
-# Temporary files
 *.tmp
 *.temp
 .cache/
+.env
+.env.local
 
-# Data files (optional - uncomment if you don't want to commit CSV files)
-# *.csv
-# *.xlsx
-# *.xls
-
-# Model files (optional - uncomment if models are too large)
+# Large model binaries & checkpoints (optional)
+# *.joblib
 # *.h5
 # *.pkl
 # *.model
-
