@@ -1,0 +1,631 @@
+First: the central story of the paper needs to change
+At present, the paper's story is essentially:
+Single FBG → PINN → strain/temperature decoupling → 1.4 pm error → robust solution.
+I recommend changing it to:
+Single-FBG thermo-mechanical sensing is an ill-posed inverse problem. We formulate it as a measurement-law-constrained, partially supervised inverse-learning problem and experimentally investigate whether physics-informed regularization improves reconstruction, robustness, data efficiency and generalization.
+This is much more scientifically defensible.
+paper already acknowledges that the combined regime has no individual strain/temperature labels and that evaluation is therefore primarily in the wavelength domain. 
+Do not hide this limitation. Make it part of the scientific contribution.
+ABSTRACT — REWRITE
+This needs to be rewritten after all results are finalized.
+The current abstract claims approximately 1.4 pm MAE and 2.1 pm RMSE and a 40× improvement. 
+But your new Results document reports another benchmark:
+1.99 pm MAE / 3.05 pm RMSE / R² = 0.99989.
+Do not leave both sets of numbers in the paper.
+The abstract should contain:
+problem 
+limitation of single-FBG 
+proposed method 
+partial supervision 
+physics measurement law 
+experimental dataset 
+comparison with baselines 
+noise robustness 
+data efficiency 
+final result 
+limitation/qualification. 
+And the "40×" claim should refer specifically to wavelength reconstruction, not strain/temperature accuracy.
+
+D. INTRODUCTION — MAJOR REVISION
+The introduction is currently reasonable, but the novelty argument needs strengthening.
+Your current introduction says that conventional PINNs are largely PDE-centric and that instrumentation-driven algebraic measurement problems are relatively unexplored. 
+Keep that idea, but do not make it your only novelty argument.
+Add a paragraph on the fundamental identifiability problem
+Explicitly state:
+ΔλB​=Kϵ​ϵ+KT​ΔT 
+contains one observable and two latent variables.
+Therefore:
+The proposed method does not claim that the measurement equation alone makes the inverse problem uniquely identifiable. Instead, the neural model exploits partial experimental supervision and learned operating-regime structure while using the measurement law as a physical consistency constraint.
+This sentence—or something very close to it—is important.
+E. ADD A NEW "RESEARCH GAP" PARAGRAPH
+After the existing literature discussion, add something like:
+Existing approaches
+Dual/multiple FBGs 
+Specialized packaging 
+Analytical calibration 
+ANN/ML methods 
+Physics-informed methods. 
+Then identify the gap:
+Existing approaches either add sensing hardware, depend on extensive labelled datasets, or employ physics-informed learning primarily for PDE-governed systems. A less explored direction is to formulate the single-FBG problem as an algebraic measurement-law-constrained inverse-learning problem under partial supervision, where separately acquired single-physics experiments provide partial labels and the combined regime is constrained by the sensor equation.
+This is your real research gap.
+
+F. UPDATE THE LITERATURE REVIEW
+This is mandatory.
+Do not submit the current literature review unchanged.
+There are now 2026 publications specifically addressing:
+FBG strain-temperature decoupling 
+physics-informed neural networks 
+physical/sensor co-design 
+cross-sensitivity degeneracy. 
+So need a new subsection/table comparing these recent papers with yours.
+Add a table like:
+This table will make your novelty much easier for a reviewer to understand.
+G. CONTRIBUTIONS — REWRITE
+Your current contribution list is good but too generic. 
+Replace it with approximately four specific contributions:
+Contribution 1
+A physics-informed inverse-learning formulation for single-FBG thermo-mechanical estimation based on the algebraic FBG measurement law.
+Contribution 2
+A partial-supervision strategy using strain-only and temperature-only experiments to train the latent-variable mapping without requiring fully labelled combined thermo-mechanical data.
+Contribution 3
+A comprehensive experimental evaluation involving six machine-learning/calibration methods, measurement-noise robustness, data-efficiency analysis, physics-loss ablation, cross-validation and bootstrap uncertainty analysis.
+Contribution 4
+An analysis of the sensitivity of the learned solution to uncertainty in the FBG strain and temperature sensitivity coefficients.
+That is a much stronger contribution list.
+H. ADD A FORMAL "IDENTIFIABILITY AND PROBLEM FORMULATION" SUBSECTION
+Currently, the paper explains the issue, but I want it elevated into a formal subsection.
+Proposed subsection:
+II-B. Identifiability of Single-FBG Thermo-Mechanical Estimation
+Explain:
+ΔλB​=Kϵ​ϵ+KT​ΔT 
+and:
+y=f(ϵ,T) 
+where:
+y∈R,(ϵ,T)∈R2. 
+Then explain that:
+f−1(ΔλB​) 
+is not unique.
+Then explain exactly what your model does:
+[ϵ^,ΔT]=Nθ​(ΔλB​) 
+and:
+L=Ldata​+λLphysics​. 
+This will make the mathematical foundation much stronger.
+I. METHODOLOGY — KEEP MOST OF IT, BUT CLARIFY
+Make the following equation prominent:
+Lphysics​=(Kϵ​ϵ^+KT​ΔT−ΔλB​)2 
+Then explain:
+The physics term does not independently determine the two latent variables; instead, it penalizes predicted combinations that violate the experimentally calibrated sensor response.
+This is a very important correction.
+J. ADD A NETWORK ARCHITECTURE FIGURE
+Your architecture should be shown visually:
+                Measured ΔλB
+                     │
+                     ▼
+             Input normalization
+                     │
+                     ▼
+              Neural Network
+                     │
+             ┌───────┴───────┐
+             ▼               ▼
+        Predicted ε      Predicted ΔT
+             │               │
+             └───────┬───────┘
+                     ▼
+         FBG measurement equation
+                     │
+                     ▼
+           Reconstructed ΔλB
+                     │
+                     ▼
+             Physics Loss
+Then show the data-loss branch separately.
+This will make the method immediately understandable.
+
+
+
+K. EXPERIMENTAL SETUP — EXPAND
+Your current setup is good:
+single-mode FBG 
+stainless-steel specimen 
+Hyperion interrogator 
+ENLIGHT 
+5 kHz acquisition 
+muffle furnace 
+controlled mechanical loading. 
+But add:
+1. Photograph of experimental setup
+Not just a schematic.
+2. Experimental flow diagram
+FBG embedded specimen
+        ↓
+Strain experiment
+        ↓
+Temperature experiment
+        ↓
+Combined experiment
+        ↓
+Data preprocessing
+        ↓
+PINN
+3. Exact experimental protocol
+should document:
+number of loading cycles 
+strain increments 
+temperature increments 
+dwell time 
+heating/cooling procedure 
+stabilization criteria 
+sampling duration 
+sensor wavelength 
+initial Bragg wavelength 
+specimen dimensions 
+FBG gauge length if available. 
+These details are currently insufficient for full reproducibility.
+
+L. DATASET SECTION — MAJOR IMPROVEMENT
+Your paper currently says:
+9,063 samples
+7,250 training
+1,813 testing. 
+But the GitHub repository gives you a much better opportunity.
+Explicitly map:
+The repository already contains these datasets and a data dictionary, so this is a strength.
+
+M. VERY IMPORTANT — FIX THE TRAIN/TEST SPLIT
+This is something I want you guys to investigate in the code.
+The paper currently says:
+7,250 / 1,813 samples. 
+If these are randomly sampled from a time series, do not use that as your only validation.
+Add:
+Experiment-wise or cycle-wise split
+For example:
+Experiment A/B/C → training
+Experiment D → validation
+Experiment E → testing
+This avoids adjacent time samples appearing in both training and testing.
+If the current code uses random sample splitting, rerun the results with experiment-wise splitting.
+This is one of the most important code changes.
+N. ADD TIME-INPUT ABLATION
+Your GitHub data contains a time variable.
+Therefore, s must verify whether time is used as an input.
+If yes, report this explicitly.
+I recommend:
+This is important because time could provide information that helps the network distinguish operating regimes.
+If time is being used, your current claim of:
+"single measurement"
+needs to be phrased carefully.
+
+
+O. RESULTS SECTION — THIS IS WHERE MOST OF THE NEW WORK GOES
+Your existing Results section should be restructured substantially.
+Currently it starts with raw wavelength and then proceeds through reconstruction, sensitivity, etc. 
+I recommend the following exact structure.
+
+
+IV. RESULTS AND DISCUSSION
+A. Experimental Wavelength Response
+Keep your current Fig. 5.
+Show:
+strain-only 
+temperature-only 
+combined. 
+Explain the different regimes.
+
+B. Sensitivity Coefficient Calibration
+Move your coefficient estimation earlier.
+Report:
+Kϵ​ 
+and
+KT​. 
+Show regression plots:
+Figure
+Wavelength vs strain
+and
+Wavelength vs temperature
+with:
+experimental points 
+regression line 
+R² 
+confidence interval if possible. 
+This is an important calibration step.
+current paper already describes estimating these coefficients from strain-only and temperature-only experiments. 
+P. NEW RESULT 1 — SIX-MODEL BENCHMARK
+This should be one of the main results.
+Your new Results document has:
+Add:
+Table VI — Comprehensive comparison of competing methods
+And:
+Figure
+MAE and RMSE comparison
+Use a bar chart.
+But very important:
+Clearly label these as:
+wavelength-domain reconstruction metrics
+unless you have independent strain/temperature ground truth.
+Q. NEW RESULT 2 — PHYSICS ABLATION
+This is essential.
+Your additional results contain:
+λ=0.1,1,10 
+with best performance around λ = 1. 
+Put this immediately after the baseline comparison.
+Section:
+C. Effect of Physics-Loss Weight
+Show:
+λvsMAE/RMSE 
+And ideally rerun:
+λ=0, 0.01, 0.1, 1, 10, 100 
+You already had this broader range in the earlier manuscript methodology, so the experiment should ideally use the same range consistently.
+This is critical because:
+λ = 0
+is effectively your data-only neural network baseline.
+That gives you direct evidence that physics actually contributes.
+R. NEW RESULT 3 — NOISE ROBUSTNESS
+This should be another main subsection.
+You already have:
+σ=0.5,1,2,5,10pm 
+in the paper. 
+And the new Results document contains the corresponding evaluation. 
+Add:
+Figure: MAE/RMSE vs noise standard deviation
+and table:
+Use one consistent noise set throughout the paper.
+
+S. NEW RESULT 4 — DATA-EFFICIENCY
+This is actually one of my favorite experiments in your new Results document.
+You have:
+20%, 40%, 60%, 80%, 100%.
+Create:
+Section
+E. Performance Under Limited Training Data
+Figure
+Training data(%)vsRMSE 
+And compare:
+PINN vs data-only NN
+if you have those results.
+This gives you a strong argument for physics-informed learning.
+
+T. NEW RESULT 5 — 5-FOLD CROSS-VALIDATION
+Add:
+Section
+F. Cross-Validation and Model Stability
+Report:
+mean MAE 
+standard deviation 
+mean RMSE 
+standard deviation 
+median 
+IQR. 
+Your additional results already contain the 5-fold analysis. 
+But:
+If current 5-fold splitting is random sample-level splitting, I would rerun it using experiment/cycle-wise groups if possible.
+That would be much stronger.
+U. NEW RESULT 6 — BOOTSTRAP
+Keep this, but make it shorter.
+The 1,000-iteration bootstrap analysis is useful. 
+Put it under:
+G. Statistical Uncertainty Analysis
+Report:
+bootstrap mean 
+median 
+95% CI 
+standard deviation. 
+But correct the statistical language.
+Don't say:
+"There is a 95% probability that the true MAE lies in the interval."
+Say:
+"The bootstrap procedure yielded a 95% confidence interval for the estimated test-set MAE."
+If your data are strongly time-correlated, preferably use block bootstrap.
+V. SENSITIVITY COEFFICIENT ROBUSTNESS
+Keep your existing experiment.
+You have:
+nominal 
+±5% 
+±10%. 
+Your current results are:
+I would expand this if computationally easy:
+±1, ±2, ±5, ±10, ±15, ±20%.
+Then make a curve.
+This could become a strong practical contribution.
+W. REMOVE/REWRITE TABLE X
+This is important.
+Your paper currently converts wavelength error into:
+~1.2 µε MAE and ~0.13°C MAE for PINN. 
+This can be misleading.
+A wavelength residual does not automatically mean that both predicted latent variables have those individual errors.
+rename the table:
+Equivalent single-variable error scales corresponding to wavelength reconstruction residuals
+and explicitly say:
+These values are sensitivity-based error equivalents and should not be interpreted as independently validated strain and temperature estimation errors.
+That single sentence will protect you from a major reviewer criticism.
+
+X. ADD A DEDICATED "IDENTIFIABILITY DISCUSSION"
+This should be one of your most important discussion sections.
+Proposed heading:
+H. Identifiability, Physical Consistency, and Limitations
+Explain:
+What the model demonstrates
+accurate wavelength reconstruction 
+physical consistency 
+robustness 
+data efficiency 
+stability. 
+What the model does NOT independently prove
+unique ground-truth decomposition of combined strain and temperature. 
+This honesty will actually make the paper more credible, not weaker.
+ ADD A NEW "COMPARISON WITH RECENT METHODS" TABLE
+This is necessary for novelty.
+I would include at least:
+This will make your novelty immediately visible.
+AA. DISCUSSION — MAKE IT MUCH STRONGER
+Currently the paper has good physical-consistency discussion. 
+But discussion should answer:
+Why does PINN outperform MLP?
+Not simply:
+"because physics."
+Explain that the physics loss restricts the hypothesis space to solutions compatible with the calibrated FBG response.
+Why is it more data-efficient?
+Because the measurement law acts as an inductive prior.
+Why is it robust?
+Because the learned mapping is not optimized purely on statistical fit.
+Why doesn't physics completely solve identifiability?
+Because one measurement remains one measurement.
+That last point is important.
+
+AB. ADD FAILURE CASES
+This is something currently missing.
+Show 2–3 examples where the model has larger reconstruction error.
+For example:
+Figure:
+Best-case reconstruction
+Typical reconstruction
+Worst-case reconstruction
+Then discuss:
+transient response 
+thermal stabilization 
+high noise 
+operating-range boundaries. 
+Reviewers appreciate this much more than only showing the best curves.
+AC. ADD ERROR DISTRIBUTION
+Currently you report MAE/RMSE.
+Add:
+Histogram of residuals
+ei​=Δλpredicted​−Δλactual​ 
+and report:
+mean residual 
+standard deviation 
+95th percentile 
+maximum absolute error. 
+This will make the robustness analysis much more convincing.
+AD. ADD CALIBRATION CURVES
+For both:
+Strain-only
+ΔλB​vs.ϵ 
+Temperature-only
+ΔλB​vs.ΔT 
+show:
+raw points 
+fitted line 
+sensitivity coefficient 
+R² 
+residual. 
+This validates the physics parameters before they are fed into the PINN.
+AE. TRAINING DETAILS — IMPROVE
+The current table gives:
+Adam 
+learning rate 10−3 
+batch size 64 
+7,250 training samples 
+1,813 testing 
+500 epochs 
+λ = 1. 
+Add:
+random seed 
+initialization method 
+activation function 
+number of hidden layers 
+neurons per layer 
+normalization method 
+output scaling 
+weight initialization 
+early-stopping patience 
+hardware used 
+Python version 
+TensorFlow/PyTorch version. 
+Most of these should come directly from the GitHub notebook.
+AF. BASELINES — STRENGTHEN
+Your new Results document has six models, which is much better than the two baselines in the current paper.
+Use all six.
+But make sure:
+Every model uses:
+same training data 
+same test data 
+same preprocessing 
+same target 
+same evaluation metric. 
+Your current paper explicitly says identical datasets/preprocessing/splits/settings are used for fair comparison. 
+Keep that statement only if the code actually does this.
+
+CONCLUSION — REWRITE
+The conclusion should NOT say:
+"The proposed PINN solves the single-sensor strain-temperature decoupling problem."
+Instead:
+"The results demonstrate that measurement-law-constrained inverse learning can provide highly accurate wavelength reconstruction and improved robustness compared with the evaluated analytical and data-driven baselines under the investigated experimental conditions."
+Then explicitly state:
+"Because simultaneous strain and temperature are not independently measured in the combined regime, the reported results establish physical consistency and reconstruction performance rather than direct ground-truth validation of the two latent variables."
+This is a much stronger scientific conclusion.
+
+AK. APPLICATION SECTION — REDUCE THE CLAIM
+Your bridge/SHM discussion is useful, but currently it goes too far.
+Don't claim:
+early fatigue damage detection
+unless you actually performed fatigue experiments.
+Call it:
+"Potential Application to Structural Health Monitoring"
+and say it is a future application.
+AL. ADD LIMITATIONS — CURRENTLY TOO WEAK
+I would explicitly list:
+Limitation 1
+Single-sensor inverse problem is fundamentally underdetermined.
+Limitation 2
+Combined regime lacks independent strain/temperature ground truth.
+Limitation 3
+Experiments use a controlled laboratory environment.
+Limitation 4
+Linearized FBG sensing relationship is assumed.
+Limitation 5
+Long-term drift/aging has not been experimentally demonstrated.
+Limitation 6
+Generalization to other FBGs/specimens has not yet been established.
+Limitation 7
+Noise robustness currently uses injected noise during evaluation rather than exclusively measured environmental noise.
+This is okay. Good papers acknowledge limitations.
+AM. ADD A FUTURE-WORK PARAGRAPH
+Your next work can be:
+Multi-specimen validation 
+Different FBGs 
+Different host materials 
+Long-term drift 
+Real environmental noise 
+Independent reference sensors 
+Dynamic loading 
+Nonlinear FBG response 
+Online/incremental learning 
+Physics-informed uncertainty quantification. 
+
+AN. FIURES I WOULD HAVE IN THE FINAL PAPER
+aim for approximately 8 main figures:
+Fig. 1
+FBG operating principle + cross-sensitivity.
+Fig. 2
+Experimental setup.
+Fig. 3
+Proposed PINN architecture.
+Fig. 4
+Three experimental regimes.
+Fig. 5
+Sensitivity calibration.
+Fig. 6
+Six-model benchmark.
+Fig. 7
+Noise robustness.
+Fig. 8
+Data efficiency + physics-loss ablation.
+If page limits permit:
+Fig. 9
+Cross-validation/uncertainty.
+Fig. 10
+Sensitivity coefficient robustness.
+Some can be combined intelligently.
+
+AO. TABLES WOULD HAVE
+Table I
+Comparison with existing FBG decoupling approaches.
+Table II
+Experimental hardware/setup.
+Table III
+Dataset configuration.
+Table IV
+PINN architecture/hyperparameters.
+Table V
+Six-model benchmark.
+Table VI
+Noise robustness.
+Table VII
+Physics-loss ablation.
+Table VIII
+Data-efficiency results.
+Table IX
+Cross-validation/statistical analysis.
+Table X
+Sensitivity coefficient perturbation.
+That's enough.
+
+.
+
+AQ. ONE THING I WOULD LOVE TO SEE ADDED IF POSSIBLE
+run one additional experiment, make it:
+Leave-one-experiment-out validation
+For example:
+Experiment 1 → Train
+Experiment 2 → Train
+Experiment 3 → Train
+Experiment 4 → Validation
+Experiment 5 → Test
+Then compare against the random split.
+If the model still performs well, you have a much stronger generalization claim.
+
+
+
+
+
+
+
+
+
+AR. FINAL PAPER STRUCTURE I RECOMMEND
+Your final manuscript should look approximately like this:
+Title
+
+Abstract
+
+Index Terms
+
+I. INTRODUCTION
+   A. FBG sensing and cross-sensitivity
+   B. Existing decoupling approaches
+   C. ML approaches
+   D. Physics-informed learning
+   E. Research gap
+   F. Contributions
+
+II. RELATED WORK
+   A. FBG strain-temperature decoupling
+   B. ML-based FBG sensing
+   C. Physics-informed sensing
+   D. Comparison with recent work
+
+III. PROBLEM FORMULATION
+   A. FBG measurement law
+   B. Identifiability
+   C. Partial-supervision formulation
+
+IV. PROPOSED METHOD
+   A. Network architecture
+   B. Data-consistency loss
+   C. Physics-consistency loss
+   D. Joint optimization
+   E. Training algorithm
+
+V. EXPERIMENTAL SETUP
+   A. FBG sensor
+   B. Interrogator
+   C. Mechanical loading
+   D. Thermal loading
+   E. Experimental regimes
+   F. Dataset
+   G. Calibration
+   H. Evaluation protocol
+
+VI. RESULTS AND DISCUSSION
+   A. Sensitivity calibration
+   B. Baseline comparison
+   C. Physics-loss ablation
+   D. Noise robustness
+   E. Data efficiency
+   F. Cross-validation
+   G. Bootstrap uncertainty
+   H. Coefficient uncertainty
+   I. Error/failure analysis
+   J. Physical consistency and identifiability
+
+VII. PRACTICAL IMPLICATIONS AND LIMITATIONS
+
+VIII. POTENTIAL SHM APPLICATION
+
+IX. CONCLUSION
+
+REFERENCES
+
+
+

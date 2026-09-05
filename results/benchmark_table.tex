@@ -1,0 +1,12 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & MAE (pm) & RMSE (pm) & R² & Physics Residual (pm) & Training Time (s) & Inference Time (s) \\
+\midrule
+Linear Regression & 55.8985 & 81.5664 & 0.92476 & 55.8985 & 0.001 & 0.001 \\
+MLP Baseline & 20.8499 & 44.0984 & 0.97801 & 20.8499 & 9.922 & 0.002 \\
+SVR Baseline & 20.6783 & 48.3636 & 0.97355 & 20.6783 & 2.086 & 0.885 \\
+Gaussian Process & 44.1546 & 125.3074 & 0.82242 & 44.1546 & 2.001 & 0.073 \\
+Random Forest & 11.5274 & 36.1676 & 0.98521 & 11.5274 & 0.879 & 0.029 \\
+Proposed PINN & 1.9878 & 3.0530 & 0.99989 & 1.9878 & 4.388 & 0.024 \\
+\bottomrule
+\end{tabular}

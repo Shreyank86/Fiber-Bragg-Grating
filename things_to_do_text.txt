@@ -1,0 +1,297 @@
+PHASE 1 – Understand the Existing Work (Mandatory)
+Before making any code changes, the students must fully understand the existing work.
+Task 1. Repository Review
+Study the repository and prepare documentation explaining:
+Overall repository structure 
+Purpose of every notebook/script 
+Dataset description 
+Input features 
+Output variables 
+Data preprocessing pipeline 
+Neural network architecture 
+Physics loss implementation 
+Total loss function 
+Training pipeline 
+Evaluation metrics 
+Existing experiments 
+Deliverable
+A document (8–10 pages) explaining the complete repository.
+
+Task 2. Literature Review
+Read all papers cited in the manuscript.
+Prepare
+one-page summary of each paper 
+methodology 
+limitations 
+relation to our work 
+
+PHASE 2 – Improve the Technical Contribution
+
+Objective 1
+Position the problem as an Inverse Measurement Problem
+This is extremely important.
+Current paper:
+PINN for strain-temperature decoupling
+New positioning:
+Physics-informed solution for an inverse sensing problem.
+Explain that
+Most PINNs solve
+PDE
+↓
+Unknown field
+Our work solves
+Measured wavelength
+↓
+Unknown strain
+Unknown temperature
+This is
+Measurement inversion
+rather than
+Forward physics simulation.
+This should be emphasized throughout the paper.
+
+Objective 2
+Replace "Engineering PINN"
+Do NOT use terms like
+Engineering PINN
+Instead use
+Measurement-constrained PINN
+or
+Physics-guided inverse sensing framework
+or
+Instrumentation-oriented PINN
+These sound much more scientific.
+
+Objective 3
+Rewrite Contributions
+Current contributions are generic.
+Rewrite as
+Contribution 1
+A physics-informed inverse measurement framework that embeds the analytical FBG sensing equation directly into the optimization objective instead of enforcing PDE residuals.
+Contribution 2
+A single-sensor framework capable of decoupling strain and temperature without auxiliary sensing hardware.
+Contribution 3
+Comprehensive validation through machine learning baselines, robustness analysis, cross-validation, bootstrap confidence intervals, and ablation studies.
+Contribution 4
+Experimental verification demonstrating physically consistent predictions under limited and noisy data.
+
+PHASE 3 – Machine Learning Benchmarking
+This is the highest priority.
+Implement
+Linear Regression
+(already available)
+
+Random Forest Regression
+Compare
+MAE
+RMSE
+R²
+Training time
+Inference time
+
+Support Vector Regression
+Same metrics.
+
+Multi-layer Perceptron
+Same metrics.
+
+Gaussian Process Regression
+Very important.
+Also report
+Prediction uncertainty.
+
+Final Comparison Table
+
+PHASE 4 – Physics Ablation
+Current notebook varies λ.
+Keep it.
+Add another experiment.
+Train
+Neural Network
+↓
+No Physics Loss
+Train
+PINN
+↓
+Physics Loss
+Compare
+MAE
+RMSE
+R²
+Convergence
+Explain
+How much improvement comes from the physics constraint.
+
+PHASE 5 – Noise Robustness
+Add Gaussian noise.
+Noise levels
+1%
+3%
+5%
+10%
+Evaluate every model.
+Generate
+RMSE vs Noise
+MAE vs Noise
+Discuss why PINN degrades more gracefully.
+
+PHASE 6 – Small Data Analysis
+Train using
+20%
+40%
+60%
+80%
+100%
+training data.
+Plot
+Training Data %
+↓
+RMSE
+PINNs should show better performance in the low-data regime.
+
+PHASE 7 – Hyperparameter Sensitivity
+Study
+Learning rate
+Batch size
+Physics weight λ
+Hidden neurons
+Number of layers
+Optimizer
+Report
+Sensitivity plots.
+
+PHASE 8 – Cross Validation
+Already implemented.
+Move into the paper.
+Include
+Mean
+Standard deviation
+95% confidence interval
+
+PHASE 9 – Bootstrap Analysis
+Already implemented.
+Move into Results section.
+
+PHASE 10 – Comparison with Existing FBG Methods
+This is currently missing.
+Create a table.
+This is essential.
+
+PHASE 11 – Literature Comparison
+Update existing PINN comparison.
+Avoid writing
+"We are the first"
+Instead use
+"To the best of our knowledge"
+or
+"Existing literature has paid limited attention to..."
+
+PHASE 12 – Explainability
+Discuss
+Why PINN performs better.
+How the physics constraint regularizes learning.
+Why it avoids physically impossible predictions.
+
+PHASE 13 – Uncertainty Discussion
+Discuss
+Gaussian Process
+↓
+Provides uncertainty.
+PINN
+↓
+Provides physical consistency.
+Explain
+Advantages
+Limitations
+Future work
+No need to implement Bayesian PINNs.
+
+PHASE 14 – Figures
+Produce publication-quality figures.
+Required figures
+Architecture diagram 
+Training loss 
+Validation loss 
+Prediction vs Ground Truth 
+Residual histogram 
+RMSE comparison 
+MAE comparison 
+R² comparison 
+Noise robustness 
+Small data experiment 
+λ ablation 
+Cross-validation box plot 
+Bootstrap confidence intervals 
+
+PHASE 15 – Tables
+Required tables
+Table 1
+Dataset description
+
+Table 2
+Hyperparameters
+
+Table 3
+Baseline comparison
+
+Table 4
+Cross-validation
+
+Table 5
+Bootstrap statistics
+
+Table 6
+Noise robustness
+
+Table 7
+Small-data experiment
+
+Table 8
+Ablation study
+
+Table 9
+Comparison with literature
+
+PHASE 16 – Discussion
+Add a separate discussion section.
+Discuss
+Why PINN works.
+Why physics helps.
+Why single FBG is difficult.
+Limitations.
+Future work.
+Deployment considerations.
+
+PHASE 17 – Conclusion
+Strengthen conclusion.
+Instead of
+"We propose a PINN."
+Write
+"This work demonstrates that embedding analytical measurement physics within deep learning enables robust inverse sensing using a single FBG sensor, extending the scope of Physics-Informed Neural Networks beyond PDE-based scientific computing into instrumentation-oriented sensing applications."
+
+PHASE 18 – Future Work
+Mention
+Real-time implementation
+Embedded hardware
+FPGA
+Edge AI
+Digital twins
+Transfer learning
+Multi-FBG sensing
+Bayesian PINNs
+Online calibration
+
+PHASE 19 – Code Quality
+Improve repository.
+Use
+README
+requirements.txt
+comments
+modular code
+fixed random seeds
+automatic figure generation
+automatic LaTeX tables
+
+Final Target
+The final paper should tell the following story:
+Conventional FBG strain–temperature decoupling relies on multiple sensors or purely data-driven regression models. Existing Physics-Informed Neural Networks primarily target PDE-constrained scientific computing. This work bridges instrumentation and scientific machine learning by embedding the analytical FBG measurement equation directly into a neural network loss function, thereby formulating strain–temperature decoupling as an inverse measurement problem. Through comprehensive benchmarking against classical and modern machine learning methods, extensive robustness evaluation, and rigorous statistical validation, the proposed framework demonstrates accurate, physically consistent, and practical single-sensor sensing suitable for next-generation intelligent instrumentation.
