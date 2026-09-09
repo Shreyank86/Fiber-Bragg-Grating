@@ -60,6 +60,7 @@ def run_task5():
     X = combined_raw[["Time", "delta_lambda_pm"]].values
     y = combined_raw["delta_lambda_pm"].values.reshape(-1, 1)
     
+    # We use n_splits=1 here because we only need a single random Train/Test split for failure case analysis, rather than multiple cross-validation folds.
     gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
     train_idx, test_idx = next(gss.split(X, y, groups))
     
@@ -161,7 +162,7 @@ def run_task6():
         y_boot_np = y[boot_idx].flatten()
         
         model = build_pinn_model()
-        train_pinn(model, X_boot, y_boot, epochs=100) # fast train for boot
+        train_pinn(model, X_boot, y_boot, epochs=500)
         
         y_pred = get_predictions(model, X_boot)
         maes.append(mean_absolute_error(y_boot_np, y_pred))
@@ -193,6 +194,7 @@ def run_task7():
     y = combined_raw["delta_lambda_pm"].values.reshape(-1, 1)
     
     # Split out a pure fixed test set first (e.g. last 20% of cycles) to evaluate everything against
+    # n_splits=1 is used to create a single, fixed hold-out test set to evaluate all varying training fractions against.
     gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
     train_idx, test_idx = next(gss.split(X, y, groups))
     

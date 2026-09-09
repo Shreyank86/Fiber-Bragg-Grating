@@ -105,7 +105,7 @@ def build_and_train_pinn(X_train, y_train, X_test, y_test, input_dim=2, physics_
         optimizer.apply_gradients(zip(grads, pinn_model.trainable_variables))
         return loss
 
-    epochs = 200
+    epochs = 501
     for epoch in range(epochs):
         train_step_ablation(X_train, y_train)
 

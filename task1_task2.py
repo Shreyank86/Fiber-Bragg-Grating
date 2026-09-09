@@ -108,7 +108,7 @@ def train_eval_models(X_train_proxy, X_test_proxy, X_train_pinn, X_test_pinn, y_
         optimizer.apply_gradients(zip(grads, pinn_model.trainable_variables))
         return loss
 
-    epochs = 200 # slightly reduced for evaluation speed, original was 500
+    epochs = 501
     for epoch in range(epochs):
         train_step(X_train_tf, y_train_tf)
 
