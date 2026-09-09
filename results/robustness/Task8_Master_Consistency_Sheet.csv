@@ -1,0 +1,6 @@
+Result,Dataset,Train/Test protocol,Noise,λ,Input,Purpose
+0.51 pm RMSE,TEMP_STRAIN_CSV,Random 80/20,None,1.0,ΔλB + time,Original baseline report
+0.61 pm RMSE,TEMP_STRAIN_CSV,Random 80/20,None,1.0,ΔλB + time,Original baseline report
+1.12 pm RMSE,TEMP_STRAIN_CSV,Random 80/20,None,1.0,ΔλB + time,Data Efficiency 100%
+1.99 pm MAE,TEMP_STRAIN_CSV,Cycle-wise 80/20,None,1.0,ΔλB + time,Task 1 Output
+3.05 pm RMSE,TEMP_STRAIN_CSV,Cycle-wise 80/20,None,1.0,ΔλB + time,Task 1 Output
